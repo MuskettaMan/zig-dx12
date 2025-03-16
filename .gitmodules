@@ -1,0 +1,3 @@
+[submodule "libs/zwindows"]
+	path = libs/zwindows
+	url = https://github.com/zig-gamedev/zwindows
