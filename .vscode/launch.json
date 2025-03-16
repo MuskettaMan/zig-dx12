@@ -5,12 +5,13 @@
             "name": "Debug Zig",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/zig-out/bin/${workspaceFolderBasename}",
+            "program": "${workspaceFolder}/zig-out/bin/${workspaceFolderBasename}.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
-            "preLaunchTask": "build"
+            "preLaunchTask": "build",
+            "console": "externalTerminal"
         }
     ]
 }
