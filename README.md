@@ -22,6 +22,9 @@ brew install zig
 
 # Windows (Scoop)
 scoop install zig
+
+# Windows (choco)
+choco install zig
 ```
 
 ### **2. Clone the repository**
