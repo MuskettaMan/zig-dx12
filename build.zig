@@ -1,6 +1,10 @@
 const std = @import("std");
 const builtin = @import("builtin");
 
+pub fn pathResolve(b: *std.Build, paths: []const []const u8) []u8 {
+    return std.fs.path.resolve(b.allocator, paths) catch @panic("OOM");
+}
+
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
 
@@ -30,6 +34,15 @@ pub fn build(b: *std.Build) void {
     exe.root_module.addImport("zwindows", zwindows_module);
     exe.root_module.addImport("zd3d12", zd3d12_module);
     exe.root_module.addImport("zxaudio2", zxaudio2_module);
+
+    const compile_shaders = @import("zwindows").addCompileShaders(b, "Main", zwindows_dependency, .{ .shader_ver = "6_5" });
+    const root_path = pathResolve(b, &.{ @src().file, ".."});
+
+    const hlsl_path = b.pathJoin(&.{ root_path, "src", "shaders", "main.hlsl" });
+    compile_shaders.addVsShader(hlsl_path, "vsMain", b.pathJoin(&.{ root_path, "src", "shaders", "main.vs.cso" }), "");
+    compile_shaders.addPsShader(hlsl_path, "psMain", b.pathJoin(&.{ root_path, "src", "shaders", "main.ps.cso" }), "");
+
+    exe.step.dependOn(compile_shaders.step);
 
     const zwindows = @import("zwindows");
     zwindows.install_xaudio2(&exe.step, zwindows_dependency, .bin);
